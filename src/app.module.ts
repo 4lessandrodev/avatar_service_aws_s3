@@ -1,17 +1,10 @@
 import { Module } from '@nestjs/common';
-import { S3 } from 'aws-sdk';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { UploadService } from './services/uploader/uploader.service';
-
+import { UploadModule } from './upload-module/upload-module.module';
 @Module({
-	imports: [],
+	imports: [UploadModule],
 	controllers: [AppController],
-	providers: [
-		{
-			provide: S3,
-			useFactory: () => new S3()
-		},
-		UploadService, AppService],
+	providers: [AppService],
 })
 export class AppModule { }

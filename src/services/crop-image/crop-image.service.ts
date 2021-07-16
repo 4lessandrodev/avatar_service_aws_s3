@@ -6,7 +6,7 @@ import { Sharp } from 'sharp';
 export class ImageService implements IImageService {
 
 	constructor (
-		@Inject()
+		@Inject('CROP_SERVICE')
 		private readonly sharp: Sharp
 	) { }
 

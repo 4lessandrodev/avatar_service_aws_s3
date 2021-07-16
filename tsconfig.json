@@ -1,24 +1,21 @@
 {
 	"compilerOptions": {
-		"outDir": "dist",
-		"target": "ESNext",
-		"module": "CommonJS",
-		"moduleResolution": "node",
-		"esModuleInterop": true,
-		"downlevelIteration": true,
-		"allowSyntheticDefaultImports": true,
-		"importHelpers": true,
-		"skipLibCheck": true,
-		"sourceMap": true,
-		"removeComments": true,
-		"strict": true,
-		"alwaysStrict": true,
-		"noImplicitAny": true,
-		"noUnusedLocals": true,
-		"noUnusedParameters": true,
-		"experimentalDecorators": true,
-		"typeRoots": ["node_modules/@types/"]
-	},
-	"include": ["server.ts", "src/**/*.ts", "knexfile.ts"],
-	"exclude": ["node_modules", "dist", "__tests__"]
+	  "strict": true,
+	  "module": "CommonJS",
+	  "declaration": true,
+	  "removeComments": true,
+	  "emitDecoratorMetadata": true,
+	  "experimentalDecorators": true,
+	  "noUnusedLocals": true,
+	  "noUnusedParameters": true,
+	  "target": "ES2019",
+	  "sourceMap": true,
+	  "outDir": "./dist",
+	  "incremental": true,
+	  "skipLibCheck": true,
+	  "baseUrl": "src",
+	  "alwaysStrict": true,
+	  "noImplicitAny": true,
+	  "esModuleInterop":true
+	}
 }

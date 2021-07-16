@@ -12,7 +12,7 @@ import {
 	TypeContent, UploadParam
 } from '../uploader/get-signed-url-param.interface';
 
-export class generateAvatarService implements IAvatarService {
+export class GenerateAvatarService implements IAvatarService {
 	constructor (
 		@Inject(ImageService)
 		private readonly imgService: ImageService,
