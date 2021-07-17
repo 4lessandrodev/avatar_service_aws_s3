@@ -39,7 +39,6 @@ export class UploadService implements IUploaderService {
 	async putSignUrl (params: UploadParam): Promise<string> {
 
 		const content = ContentType[params.ContentType];
-
 		return await this.s3.getSignedUrlPromise('putObject', {
 			...params,
 			ContentType: content
@@ -50,7 +49,7 @@ export class UploadService implements IUploaderService {
 	 * @param config as object
 	 * @property `Bucket` bucket name as string
 	 * @property `Key` filename as string
-	 * @property `Expires` expiration time in mileseconds
+	 * @property `Expires` expiration time in milliseconds
 	 * @returns url as string
 	 */
 	async getSignUrl (params: UploadParam): Promise<string> {

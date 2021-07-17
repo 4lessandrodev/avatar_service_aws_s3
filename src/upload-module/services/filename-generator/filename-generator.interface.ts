@@ -12,6 +12,6 @@ export enum Extension {
 }
 
 export type ExtensionType = keyof typeof Extension;
-export interface IFlenameService {
+export interface IFilenameService {
 	generateRandomName: (extension: ExtensionType) => string;
 }

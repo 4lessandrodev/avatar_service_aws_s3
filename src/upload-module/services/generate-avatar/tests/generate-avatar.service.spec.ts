@@ -4,7 +4,7 @@ import { createReadStream } from 'fs';
 import path from 'path/posix';
 import sharp from 'sharp';
 import { ImageService } from '../../crop-image/crop-image.service';
-import { FilenameServie } from '../../filename-generator/filename-generator.service';
+import { FilenameService } from '../../filename-generator/filename-generator.service';
 import { UploadService } from '../../uploader/uploader.service';
 import { IAvatarService } from '../generate-avatar.interface';
 import { GenerateAvatarService } from '../generate-avatar.service';
@@ -27,7 +27,7 @@ describe("generate-avatar.service", () => {
 			getSignedUrlPromise: jest.fn(() => 'https://aws.bucket/random')
 		} as unknown as S3;
 
-		service = new GenerateAvatarService(new ImageService(sharp()), new UploadService(fakeS3), new FilenameServie(), 'testes');
+		service = new GenerateAvatarService(new ImageService(sharp()), new UploadService(fakeS3), new FilenameService(), 'testes');
 	});
 
 	it("should generate a valid avatar", async () => {

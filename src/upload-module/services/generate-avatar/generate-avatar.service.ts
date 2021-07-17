@@ -5,7 +5,7 @@ import {
 	IAvatar, IAvatarService, AvatarProps
 } from './generate-avatar.interface';
 import {
-	FilenameServie
+	FilenameService
 } from '../filename-generator/filename-generator.service';
 import {
 	ContentType,
@@ -20,8 +20,8 @@ export class GenerateAvatarService implements IAvatarService {
 		@Inject(UploadService)
 		private readonly uploadService: UploadService,
 
-		@Inject(FilenameServie)
-		private readonly filenameGenerator: FilenameServie,
+		@Inject(FilenameService)
+		private readonly filenameGenerator: FilenameService,
 
 		@Inject('BUCKET_NAME')
 		private readonly bucketName: string
