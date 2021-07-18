@@ -1,6 +1,6 @@
 /**
  * Do not change mimi type
- * Only images are suported
+ * Only images are supported
  * @see(ExtensionType) on filename generator
  * @link ExtensionType
  */
@@ -13,10 +13,9 @@ export enum ContentType {
 
 export type TypeContent = keyof typeof ContentType;
 /**
- * 
  * @property Bucket bucket name as string
  * @property Key filename as string
- * @property Expires expiration time in mileseconds
+ * @property Expires expiration time in milliseconds
  * @property ContentType @see(ContentType)
  */
 export interface UrlSignParam {
@@ -28,7 +27,6 @@ export interface UrlSignParam {
 
 
 /**
- * 
  * @property Bucket bucket name as string
  * @property Key filename as string
  * @property ContentType @see(ContentType)
@@ -38,5 +36,18 @@ export interface UploadParam {
 	Bucket: string;
 	Key: string;
 	ContentType: TypeContent,
-	Body?: NodeJS.ReadableStream;
+	Body: Buffer;
+}
+
+export interface GetPresignedParam {
+	Bucket: string;
+	Key: string;
+	ContentType: TypeContent,
+}
+
+export interface PutObjectParam {
+	Bucket: string;
+	Key: string;
+	ContentType: TypeContent,
+	Body: Buffer;
 }

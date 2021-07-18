@@ -1,14 +1,16 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { randomUUID } from 'crypto';
-import { IAvatarService } from './upload-module/services/generate-avatar/generate-avatar.interface';
+import { ExtensionType } from './upload-module/services/filename-generator/filename-generator.interface';
+import { IAvatar, IAvatarService } from './upload-module/services/generate-avatar/generate-avatar.interface';
 import { GenerateAvatarService } from './upload-module/services/generate-avatar/generate-avatar.service';
 
 interface Props {
-	file: NodeJS.ReadStream,
+	file: Buffer,
 	height: number,
 	left: number,
 	top: number,
 	width: number;
+	extension: ExtensionType;
 }
 
 @Injectable()
@@ -17,15 +19,15 @@ export class AppService {
 		@Inject(GenerateAvatarService) private readonly avatarService: IAvatarService
 	) { }
 
-	async createAvatar (props: Props): Promise<void> {
-		const { height, left, top, width, file } = props;
+	async createAvatar (props: Props): Promise<IAvatar> {
+		const { height, left, top, width, file, extension } = props;
 		const result = await this.avatarService.create({
-			crop: { height, left, top, width },
-			extension: 'PNG',
-			file: file as unknown as NodeJS.ReadStream,
+			cropPositions: { height, left, top, width },
+			extension,
+			file: file,
 			userId: randomUUID()
 		});
 
-		console.log(result);
+		return result;
 	}
 }

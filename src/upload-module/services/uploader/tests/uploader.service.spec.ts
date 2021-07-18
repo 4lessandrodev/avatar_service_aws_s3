@@ -1,6 +1,7 @@
 import { S3 } from 'aws-sdk';
 import { createReadStream } from 'fs';
 import path from 'path/posix';
+import { FilesConverterService } from '../../files-converter/files-converter.service';
 import { UploadParam } from '../get-signed-url-param.interface';
 import { UploadService } from '../uploader.service';
 
@@ -8,18 +9,23 @@ describe('uploader.service', () => {
 
 	let fakeS3: S3;
 	let readPath: string;
-	let file: NodeJS.ReadableStream;
+	let file: Buffer;
+	const converter = new FilesConverterService();
 
 	beforeAll(async () => {
 		readPath = __dirname + path.join('/image.jpeg');
-		file = createReadStream(readPath);
+		const stream = createReadStream(readPath);
+		file = await converter.streamToBuffer(stream);
 	});
 
 	beforeEach(() => {
+
 		fakeS3 = {
 			getSignedUrlPromise: jest.fn(),
-			upload: jest.fn()
+			upload: jest.fn(),
+			putObject: jest.fn()
 		} as unknown as S3;
+
 	});
 
 	it("should be defined", () => {
@@ -47,26 +53,22 @@ describe('uploader.service', () => {
 
 	it('should call put pre-signed url ', async () => {
 
-		const fakeUrl = 'https://aws.s3/bucket-fake/fake-image.jpeg';
-		const params = {
+		//const fakeUrl = 'https://aws.s3/bucket-fake/fake-image.jpeg';
+		const params: UploadParam = {
 			Bucket: 'valid_bucket_name',
 			ContentType: 'JPEG',
 			Key: 'filename.jpeg',
+			Body: file
 		};
 
-		const s3Spy = jest.spyOn(fakeS3, 'getSignedUrlPromise')
-			.mockResolvedValueOnce(fakeUrl);
 
 		const service = new UploadService(fakeS3);
+		const s3Spy = jest.spyOn(service, 'putObject')
+			.mockResolvedValueOnce();
 
-		await service.putSignUrl(params as UploadParam);
+		await service.putSignUrl(params);
 
-		expect(s3Spy).toHaveBeenLastCalledWith("putObject",
-			{
-				"Bucket": "valid_bucket_name",
-				"ContentType": "image/jpeg",
-				"Key": "filename.jpeg"
-			});
+		expect(s3Spy).toHaveBeenCalled();
 	});
 
 

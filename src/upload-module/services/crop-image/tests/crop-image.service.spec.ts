@@ -1,35 +1,35 @@
 import { createReadStream, writeFileSync } from 'fs';
-import Sharp from 'sharp';
 import { ImageService } from '../crop-image.service';
 import path from 'path';
-import { streamToBuffer } from '@jorgeferrero/stream-to-buffer';
+import { FilesConverterService } from '../../files-converter/files-converter.service';
 
 describe('crop-image.service', () => {
 
-	const imgService: ImageService = new ImageService(Sharp());
+	const imgService: ImageService = new ImageService();
+	const converter = new FilesConverterService();
 
 	it('should crop an image', async () => {
 
 		const readPath = __dirname + path.join('/image.jpeg');
 		const writePath = __dirname + path.join('/result.png');
 
-		const file = createReadStream(readPath);
+		const stream = createReadStream(readPath);
+		const file = await converter.streamToBuffer(stream);
 
-		const result = await imgService.crop({
+		const result = await imgService.cropAndResizeFromBuffer({
 			file,
-			positions: {
-				width: 100,
-				height: 100,
-				top: 100,
-				left: 100
+			cropPositions: {
+				width: 200,
+				height: 200,
+				top: 200,
+				left: 200
+			},
+			resize: {
+				width: 70
 			}
 		});
 
-		const resized = await imgService.resize({ file: result, width: 200 });
-
-		const data = await streamToBuffer(resized);
-
-		writeFileSync(writePath, data);
+		writeFileSync(writePath, result);
 
 		expect(result).toBeTruthy();
 

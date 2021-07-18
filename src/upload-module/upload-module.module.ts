@@ -1,6 +1,5 @@
 import { Module } from '@nestjs/common';
 import { S3 } from 'aws-sdk';
-import sharp from 'sharp';
 import { ImageService } from './services/crop-image/crop-image.service';
 import { FilenameService } from './services/filename-generator/filename-generator.service';
 import { GenerateAvatarService } from './services/generate-avatar/generate-avatar.service';
@@ -12,15 +11,13 @@ import {
 	AWS_S3_SECRET_KEY_ID,
 	BUCKET_NAME
 } from '../config/env';
+import { FilesConverterService } from './services/files-converter/files-converter.service';
 
 @Module({
 	imports: [],
 	providers: [
+		FilesConverterService,
 		FilenameService,
-		{
-			provide: 'CROP_SERVICE',
-			useValue: sharp()
-		},
 		ImageService,
 		{
 			provide: 'BUCKET_NAME',
@@ -43,6 +40,6 @@ import {
 		GenerateAvatarService
 	],
 	controllers: [UploadController],
-	exports: [GenerateAvatarService],
+	exports: [GenerateAvatarService, FilesConverterService],
 })
 export class UploadModule { }

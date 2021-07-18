@@ -1,33 +1,32 @@
-import { Inject, Injectable } from '@nestjs/common';
-import { cropProps, IImageService, resizeProps } from './crop-image.interface';
-import { Sharp } from 'sharp';
+import { Injectable } from '@nestjs/common';
+import {
+	IImageService,
+	bufferCropProps
+} from './crop-image.interface';
+import sharp from 'sharp';
 
 @Injectable()
 export class ImageService implements IImageService {
-
-	constructor (
-		@Inject('CROP_SERVICE')
-		private readonly sharp: Sharp
-	) { }
 
 	private toFloor (value: number): number {
 		return Math.floor(value);
 	}
 
-	async crop (props: cropProps): Promise<NodeJS.ReadableStream> {
-
-		const { width, top, left, height } = props.positions;
-
-		return props.file.pipe(this.sharp).extract({
-			height: this.toFloor(height),
-			left: this.toFloor(left),
-			top: this.toFloor(top),
-			width: this.toFloor(width)
-		}).png();
-	};
-
-	async resize (props: resizeProps): Promise<NodeJS.ReadableStream> {
-		const { height, width } = props;
-		return props.file.pipe(this.sharp).resize(width, height).png();
-	};
+	async cropAndResizeFromBuffer (props: bufferCropProps): Promise<Buffer> {
+		const { width, height, left, top } = props.cropPositions;
+		const image = sharp(props.file);
+		return await image
+			.extract({
+				height: this.toFloor(height),
+				left: this.toFloor(left),
+				top: this.toFloor(top),
+				width: this.toFloor(width),
+			})
+			.resize({
+				width: props.resize.width,
+				height: props.resize.height,
+			})
+			.png()
+			.toBuffer();
+	}
 }
